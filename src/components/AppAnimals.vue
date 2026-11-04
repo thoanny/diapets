@@ -42,11 +42,6 @@ const copyToClipboard = async (text: string) => {
   }
 };
 
-const isOwner = (createdBy: string | undefined) => {
-  if (!createdBy) return false;
-  return createdBy === user.value?.id;
-};
-
 onMounted(() => {
   refresh();
 });
@@ -106,21 +101,21 @@ onMounted(() => {
       <button
         @click="share(animal.id)"
         class="btn btn-primary btn-soft btn-square btn-sm"
-        v-if="isOwner(animal.id)"
+        v-if="animal.is_owner"
       >
         <IconShare class="size-5" />
       </button>
       <button
         class="btn btn-error btn-soft btn-square btn-sm"
         @click="deleteAnimal(animal.id)"
-        v-if="isOwner(animal.id)"
+        v-if="animal.is_owner"
       >
         <IconTrash class="size-5" />
       </button>
       <button
         @click="leaveAnimal(animal.id)"
         class="btn btn-error btn-soft btn-square btn-sm"
-        v-if="!isOwner(animal.id)"
+        v-if="!animal.is_owner"
       >
         <IconX class="size-5" />
       </button>

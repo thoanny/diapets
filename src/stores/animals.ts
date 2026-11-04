@@ -18,6 +18,7 @@ export const useAnimalsStore = defineStore('animals', () => {
       .map((animal) => ({
         ...animal,
         ...members.value.find((m) => m.animal_id === animal.id),
+        is_owner: animal.created_by === user.value?.id,
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
   });
@@ -74,6 +75,7 @@ export const useAnimalsStore = defineStore('animals', () => {
     }
 
     if (type === 'code') {
+      const { refresh: entriesRefresh } = useEntriesStore();
       const { data: animal, error: addError } = await supabase.rpc('join_animal', {
         p_code: value,
       });
@@ -83,7 +85,7 @@ export const useAnimalsStore = defineStore('animals', () => {
       }
 
       console.log(`${animal.name} a été ajouté`);
-
+      entriesRefresh();
       refresh();
     } else if (type === 'name') {
       const { data: animal, error: insertError } = await supabase
