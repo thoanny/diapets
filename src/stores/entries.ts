@@ -90,5 +90,5 @@ export const useEntriesStore = defineStore('entries', () => {
     refresh();
   };
 
-  return { entriesFiltered, getEntries, addEntry, deleteEntry, errors };
+  return { entriesFiltered, getEntries, addEntry, deleteEntry, refresh, errors };
 });

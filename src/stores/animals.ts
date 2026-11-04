@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabaseClient';
 import type { Animal, AnimalInvite, AnimalMember } from '@/types/animals';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { useEntriesStore } from './entries';
 
 const { user } = useAuth();
 
@@ -101,6 +102,7 @@ export const useAnimalsStore = defineStore('animals', () => {
   };
 
   const deleteAnimal = async (animalId: string) => {
+    const { refresh: entriesRefresh } = useEntriesStore();
     const { data, error: deleteError } = await supabase
       .from('animals')
       .delete()
@@ -115,6 +117,7 @@ export const useAnimalsStore = defineStore('animals', () => {
       return;
     }
     refresh();
+    entriesRefresh();
   };
 
   const leaveAnimal = async (animalId: string) => {
@@ -123,6 +126,7 @@ export const useAnimalsStore = defineStore('animals', () => {
       return;
     }
 
+    const { refresh: entriesRefresh } = useEntriesStore();
     const { data, error: deleteError } = await supabase
       .from('animal_members')
       .delete()
@@ -141,6 +145,7 @@ export const useAnimalsStore = defineStore('animals', () => {
     }
 
     refresh();
+    entriesRefresh();
   };
 
   return {

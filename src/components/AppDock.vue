@@ -133,7 +133,6 @@ const submit = () => {
             <label class="label" for="entry_notes">Notes</label>
             <textarea class="textarea" id="entry_notes" v-model="currentEntry.notes"></textarea>
           </fieldset>
-          <pre>{{ currentEntry }}</pre>
           <button type="submit" class="btn btn-primary btn-block mt-2">Ajouter</button>
         </form>
       </div>
@@ -146,7 +145,7 @@ const submit = () => {
       <span class="dock-label">Accueil</span>
     </RouterLink>
 
-    <RouterLink to="/pet">
+    <RouterLink :to="{ name: 'Pet' }">
       <IconPaw class="size-6" stroke="1.5" />
       <span class="dock-label">{{
         animalsFiltered.length < 2 ? 'Mon animal' : 'Mes animaux'
@@ -168,7 +167,7 @@ const submit = () => {
       <span class="dock-label">Mon compte</span>
     </RouterLink>
 
-    <RouterLink to="/settings">
+    <RouterLink :to="{ name: 'Settings' }">
       <IconSettings class="size-6" stroke="1.5" />
       <span class="dock-label">Paramètres</span>
     </RouterLink>

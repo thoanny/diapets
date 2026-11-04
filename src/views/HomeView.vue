@@ -18,7 +18,7 @@ onMounted(() => {
 
 <template>
   <template v-if="user">
-    <h1>Mesures</h1>
+    <h1 class="mt-0!">Mesures</h1>
     <p v-if="errors.length > 0">Error loading entries: {{ errors.join(', ') }}</p>
     <ul
       v-if="entriesFiltered.length > 0"
@@ -56,6 +56,7 @@ onMounted(() => {
         </button>
       </li>
     </ul>
+    <div class="alert alert-info alert-soft">Aucune mesure enregistrée...</div>
     <h1>Animaux</h1>
     <AppAnimals v-if="user" />
   </template>

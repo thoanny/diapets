@@ -6,7 +6,7 @@ import * as fr from '@zxcvbn-ts/language-fr';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const SIGNUP_OPEN = false;
+const SIGNUP_OPEN = true;
 
 const { signup } = useAuth();
 const router = useRouter();

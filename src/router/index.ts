@@ -4,6 +4,8 @@ import AccountView from '@/views/AccountView.vue';
 import HomeView from '@/views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
+import PetView from '@/views/PetView.vue';
+import SettingsView from '@/views/SettingsView.vue';
 import SignupView from '@/views/SignupView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -33,6 +35,22 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: AccountView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/pet',
+    name: 'Pet',
+    component: PetView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: SettingsView,
     meta: {
       requiresAuth: true,
     },
