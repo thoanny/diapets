@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { useAuth } from '@/composables/useAuth';
 import { supabase } from '@/lib/supabaseClient';
 import { useAnimalsStore } from '@/stores/animals';
 import { IconPawFilled, IconPlus, IconShare, IconTrash, IconX } from '@tabler/icons-vue';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 
+const { user } = useAuth();
 const animalsStore = useAnimalsStore();
 const { addAnimal, deleteAnimal, leaveAnimal, refresh, getInvites } = animalsStore;
 const { errors, invitesFiltered, animalsFiltered } = storeToRefs(animalsStore);
@@ -38,6 +40,11 @@ const copyToClipboard = async (text: string) => {
   } catch (err) {
     console.error(err);
   }
+};
+
+const isOwner = (createdBy: string | undefined) => {
+  if (!createdBy) return false;
+  return createdBy === user.value?.id;
 };
 
 onMounted(() => {
@@ -99,21 +106,21 @@ onMounted(() => {
       <button
         @click="share(animal.id)"
         class="btn btn-primary btn-soft btn-square btn-sm"
-        v-if="animal.role === 'owner'"
+        v-if="isOwner(animal.id)"
       >
         <IconShare class="size-5" />
       </button>
       <button
         class="btn btn-error btn-soft btn-square btn-sm"
         @click="deleteAnimal(animal.id)"
-        v-if="animal.role === 'owner'"
+        v-if="isOwner(animal.id)"
       >
         <IconTrash class="size-5" />
       </button>
       <button
         @click="leaveAnimal(animal.id)"
         class="btn btn-error btn-soft btn-square btn-sm"
-        v-if="animal.role === 'member'"
+        v-if="!isOwner(animal.id)"
       >
         <IconX class="size-5" />
       </button>
