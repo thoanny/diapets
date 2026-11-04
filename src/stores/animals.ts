@@ -23,10 +23,12 @@ export const useAnimalsStore = defineStore('animals', () => {
   });
 
   const invitesFiltered = computed(() => {
-    return invites.value.map((invite) => ({
-      ...invite,
-      ...animals.value.find((a) => a.id === invite.animal_id),
-    }));
+    return invites.value
+      .map((invite) => ({
+        ...invite,
+        ...animals.value.find((a) => a.id === invite.animal_id),
+      }))
+      .filter((i) => i.created_by === user.value?.id);
   });
 
   const getAnimals = async () => {
