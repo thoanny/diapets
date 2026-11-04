@@ -56,7 +56,7 @@ onMounted(() => {
         </button>
       </li>
     </ul>
-    <div class="alert alert-info alert-soft">Aucune mesure enregistrée...</div>
+    <div class="alert alert-info alert-soft" v-else>Aucune mesure enregistrée...</div>
     <h1>Animaux</h1>
     <AppAnimals v-if="user" />
   </template>
