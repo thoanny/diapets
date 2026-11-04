@@ -1,2 +1,40 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+
+body {
+  @apply bg-base-200 min-h-screen;
+}
+
+.card {
+  @apply bg-base-100 border border-base-300 max-w-xl mx-auto;
+}
+
+input,
+.input {
+  @apply w-full;
+}
+
+:not(.modal-box, .card-body) > h1,
+:not(.modal-box, .card-body) > h2,
+:not(.modal-box, .card-body) > h3,
+:not(.modal-box, .card-body) > h4,
+:not(.modal-box, .card-body) > h5,
+:not(.modal-box, .card-body) > h6 {
+  @apply my-4 font-bold;
+}
+
+:not(.modal-box, .card-body) > h1 {
+  @apply text-3xl text-primary;
+}
+
+:not(.modal-box, .card-body) > h2 {
+  @apply text-2xl text-secondary;
+}
+
+:not(.modal-box, .card-body) > h3 {
+  @apply text-xl text-primary/75;
+}
+
+:not(.modal-box, .card-body) > h4 {
+  @apply text-lg text-secondary/75;
+}
