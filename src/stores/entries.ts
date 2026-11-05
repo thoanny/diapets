@@ -10,6 +10,7 @@ const { user } = useAuth();
 export const useEntriesStore = defineStore('entries', () => {
   const entries = ref<Entry[]>([]);
   const errors = ref<string[]>([]);
+  const isEntriesLoading = ref<boolean>(true);
 
   const entriesFiltered = computed(() => {
     const animalsStore = useAnimalsStore();
@@ -26,13 +27,16 @@ export const useEntriesStore = defineStore('entries', () => {
   });
 
   const getEntries = async () => {
+    isEntriesLoading.value = true;
     const { data, error: fetchError } = await supabase.from('entries').select();
     if (fetchError) {
       errors.value.push(fetchError.message);
+      isEntriesLoading.value = false;
       return;
     }
 
     entries.value = data;
+    isEntriesLoading.value = false;
   };
 
   const refresh = () => {
@@ -90,5 +94,5 @@ export const useEntriesStore = defineStore('entries', () => {
     refresh();
   };
 
-  return { entriesFiltered, getEntries, addEntry, deleteEntry, refresh, errors };
+  return { entriesFiltered, getEntries, addEntry, deleteEntry, refresh, errors, isEntriesLoading };
 });

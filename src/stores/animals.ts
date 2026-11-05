@@ -12,6 +12,9 @@ export const useAnimalsStore = defineStore('animals', () => {
   const members = ref<AnimalMember[]>([]);
   const invites = ref<AnimalInvite[]>([]);
   const errors = ref<string[]>([]);
+  const isAnimalsLoading = ref<boolean>(true);
+  const isMembersLoading = ref<boolean>(true);
+  const isInvitesLoading = ref<boolean>(true);
 
   const animalsFiltered = computed(() => {
     return animals.value
@@ -33,33 +36,42 @@ export const useAnimalsStore = defineStore('animals', () => {
   });
 
   const getAnimals = async () => {
+    isAnimalsLoading.value = true;
     const { data, error: fetchError } = await supabase.from('animals').select();
     if (fetchError) {
       errors.value.push(fetchError.message);
+      isAnimalsLoading.value = false;
       return;
     }
 
     animals.value = data;
+    isAnimalsLoading.value = false;
   };
 
   const getAnimalMembers = async () => {
+    isMembersLoading.value = true;
     const { data, error: fetchError } = await supabase.from('animal_members').select();
     if (fetchError) {
       errors.value.push(fetchError.message);
+      isMembersLoading.value = false;
       return;
     }
 
     members.value = data;
+    isMembersLoading.value = false;
   };
 
   const getInvites = async () => {
+    isInvitesLoading.value = true;
     const { data, error: fetchError } = await supabase.from('invites').select();
     if (fetchError) {
       errors.value.push(fetchError.message);
+      isInvitesLoading.value = false;
       return;
     }
 
     invites.value = data;
+    isInvitesLoading.value = false;
   };
 
   const refresh = () => {
@@ -162,5 +174,8 @@ export const useAnimalsStore = defineStore('animals', () => {
     deleteAnimal,
     leaveAnimal,
     getInvites,
+    isAnimalsLoading,
+    isMembersLoading,
+    isInvitesLoading,
   };
 });
