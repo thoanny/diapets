@@ -75,7 +75,7 @@ export const useAnimalsStore = defineStore('animals', () => {
   };
 
   const refresh = () => {
-    getAnimals();
+    // getAnimals();
     getAnimalMembers();
     getInvites();
   };
@@ -167,6 +167,7 @@ export const useAnimalsStore = defineStore('animals', () => {
   return {
     errors,
     animals,
+    getAnimals,
     animalsFiltered,
     invitesFiltered,
     refresh,
