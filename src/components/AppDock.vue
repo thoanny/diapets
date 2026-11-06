@@ -5,6 +5,7 @@ import { useEntriesStore } from '@/stores/entries';
 import { ENTRY_TYPES, type EntryType, type NewEntry } from '@/types/entries';
 import {
   IconHome,
+  IconInfoCircle,
   IconPaw,
   IconPlus,
   IconSettings,
@@ -83,8 +84,8 @@ const submit = () => {
         <button>close</button>
       </form>
     </dialog>
-    <dialog ref="add-entry-modal" class="modal px-4">
-      <div class="modal-box max-h-[95dvh] max-w-xs">
+    <dialog ref="add-entry-modal" class="modal modal-bottom px-4">
+      <div class="modal-box max-h-[95dvh] max-w-xs mx-auto">
         <form method="dialog">
           <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             <IconX class="size-4" />
@@ -107,12 +108,13 @@ const submit = () => {
             <label class="label" for="entry_value">Valeur</label>
             <label class="input">
               <input
-                type="text"
+                type="number"
                 class="grow"
                 placeholder=""
                 id="entry_value"
                 required
                 v-model="currentEntry.value"
+                min="0"
                 autofocus
               />
               {{ currentType?.unit }}
@@ -129,9 +131,20 @@ const submit = () => {
               v-model="currentEntry.measured_at"
             />
           </fieldset>
+
           <fieldset class="fieldset">
             <label class="label" for="entry_notes">Notes</label>
-            <textarea class="textarea" id="entry_notes" v-model="currentEntry.notes"></textarea>
+            <div class="inline-flex gap-1" v-if="currentEntry.type === 'food'">
+              <button
+                class="btn btn-primary btn-xs"
+                @click.prevent="currentEntry.notes = value"
+                v-for="(value, key) in ['Pâté', 'Croquettes']"
+                :key
+              >
+                {{ value }}
+              </button>
+            </div>
+            <input type="text" class="input" id="entry_notes" v-model="currentEntry.notes" />
           </fieldset>
           <button type="submit" class="btn btn-primary btn-block mt-2">Ajouter</button>
         </form>
@@ -145,7 +158,7 @@ const submit = () => {
       <span class="dock-label">Accueil</span>
     </RouterLink>
 
-    <RouterLink :to="{ name: 'Pet' }">
+    <RouterLink :to="{ name: 'Pets' }">
       <IconPaw class="size-6" stroke="1.5" />
       <span class="dock-label">{{
         animalsFiltered.length < 2 ? 'Mon animal' : 'Mes animaux'
@@ -173,9 +186,9 @@ const submit = () => {
     </RouterLink>
   </div>
   <div class="dock" v-else>
-    <RouterLink :to="{ name: 'Home' }">
-      <IconHome class="size-6" stroke="1.5" />
-      <span class="dock-label">Accueil</span>
+    <RouterLink :to="{ name: 'About' }">
+      <IconInfoCircle class="size-6" stroke="1.5" />
+      <span class="dock-label">À propos</span>
     </RouterLink>
 
     <RouterLink :to="{ name: 'Login' }">

@@ -44,8 +44,10 @@ body {
   @apply bg-base-100 border border-base-300 max-w-xl mx-auto;
 }
 
-input,
-.input {
+.card input,
+.card .input,
+.modal input,
+.modal .input {
   @apply w-full;
 }
 

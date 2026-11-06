@@ -48,13 +48,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="alert alert-error my-4" v-if="errors.length > 0">
+  <div class="alert alert-error mb-4" v-if="errors.length > 0">
     <ul class="list-disc ml-4">
       <li v-for="(error, key) in errors" :key>{{ error }}</li>
     </ul>
   </div>
 
-  <div class="card card-xs max-w-full! my-4">
+  <div class="card card-xs max-w-full! mb-4">
     <form @submit.prevent="submit" class="card-body flex-row items-center">
       <div class="card-title sr-only">Ajouter un animal</div>
       <fieldset class="fieldset">

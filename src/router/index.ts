@@ -4,7 +4,7 @@ import AccountView from '@/views/AccountView.vue';
 import HomeView from '@/views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
-import PetView from '@/views/PetView.vue';
+import PetsView from '@/views/PetsView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import SignupView from '@/views/SignupView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -15,6 +15,9 @@ const routes = [
     path: '/',
     name: 'Home',
     component: HomeView,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/about',
@@ -40,9 +43,9 @@ const routes = [
     },
   },
   {
-    path: '/pet',
-    name: 'Pet',
-    component: PetView,
+    path: '/pets',
+    name: 'Pets',
+    component: PetsView,
     meta: {
       requiresAuth: true,
     },
@@ -60,6 +63,11 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    if (to.hash) return { el: to.hash, behavior: 'smooth' };
+    return { top: 0 };
+  },
 });
 
 router.beforeEach(async (to) => {

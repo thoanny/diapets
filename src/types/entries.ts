@@ -20,12 +20,15 @@ export type NewEntry = {
 
 export type Entry = {
   id: string;
-  animal_id: string;
   user_id: string;
-  measured_at: string;
   type: EntryType;
+  measured_at: string;
   value: number;
   notes?: string;
+  animals: {
+    id: string;
+    name: string;
+  };
 };
 
 export type EntryTypeDetails = {

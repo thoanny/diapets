@@ -7,7 +7,7 @@ const router = useRouter();
 
 const submit = async () => {
   signOut();
-  router.push('/');
+  router.push('/login');
 };
 </script>
 

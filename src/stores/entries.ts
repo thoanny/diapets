@@ -1,9 +1,8 @@
 import { useAuth } from '@/composables/useAuth';
 import { supabase } from '@/lib/supabaseClient';
-import { ENTRY_TYPES, type Entry } from '@/types/entries';
-import { defineStore, storeToRefs } from 'pinia';
+import { ENTRY_TYPES, type Entry, type EntryTypeDetails } from '@/types/entries';
+import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { useAnimalsStore } from './animals';
 
 const { user } = useAuth();
 
@@ -11,24 +10,31 @@ export const useEntriesStore = defineStore('entries', () => {
   const entries = ref<Entry[]>([]);
   const errors = ref<string[]>([]);
   const isEntriesLoading = ref<boolean>(true);
+  const currentEntryType = ref<EntryTypeDetails | undefined>();
 
   const entriesFiltered = computed(() => {
-    const animalsStore = useAnimalsStore();
-    const { animals } = storeToRefs(animalsStore);
-
     return entries.value
-      .map((e) => ({
-        ...e,
-        _animal: animals.value.find((a) => a.id === e.animal_id),
-        _is_user: e.user_id === user.value?.id,
-        _type: ENTRY_TYPES.find((t) => t.id === e.type),
+      .map((entry) => ({
+        ...entry,
+        _is_user: entry.user_id === user.value?.id,
+        _type: ENTRY_TYPES.find((t) => t.id === entry.type),
       }))
+      .filter((entry) => {
+        if (!currentEntryType.value) {
+          return true;
+        }
+
+        return entry.type === currentEntryType.value.id;
+      })
       .reverse();
   });
 
   const getEntries = async () => {
     isEntriesLoading.value = true;
-    const { data, error: fetchError } = await supabase.from('entries').select();
+    const { data, error: fetchError } = await supabase
+      .from('entries')
+      .select('id, user_id, measured_at, type, value, notes, animals(id,name)')
+      .overrideTypes<Entry[], { merge: false }>();
     if (fetchError) {
       errors.value.push(fetchError.message);
       isEntriesLoading.value = false;
@@ -94,5 +100,14 @@ export const useEntriesStore = defineStore('entries', () => {
     refresh();
   };
 
-  return { entriesFiltered, getEntries, addEntry, deleteEntry, refresh, errors, isEntriesLoading };
+  return {
+    entriesFiltered,
+    getEntries,
+    addEntry,
+    deleteEntry,
+    refresh,
+    errors,
+    isEntriesLoading,
+    currentEntryType,
+  };
 });
