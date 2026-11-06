@@ -98,6 +98,9 @@ onMounted(() => {
           </div>
           <div class="text-xs font-semibold opacity-60">
             {{ entry._type?.name }}&nbsp;: {{ entry.value }}&nbsp;{{ entry._type?.unit }}
+            <template v-if="entry.type === 'glucose'">
+              ({{ Math.round(entry.value * 0.18 * 100) / 100 }}&nbsp;g/L)</template
+            >
             <template v-if="entry.notes"> / {{ entry.notes }}</template>
           </div>
         </div>

@@ -45,7 +45,7 @@ export const useEntriesStore = defineStore('entries', () => {
     isEntriesLoading.value = false;
   };
 
-  const refresh = () => {
+  const refreshEntries = () => {
     getEntries();
   };
 
@@ -80,7 +80,7 @@ export const useEntriesStore = defineStore('entries', () => {
 
     console.log(`Mesure ${entry.id} a été ajoutée`);
 
-    refresh();
+    refreshEntries();
   };
 
   const deleteEntry = async (entryId: string) => {
@@ -97,7 +97,7 @@ export const useEntriesStore = defineStore('entries', () => {
       errors.value.push("Seul le propriétaire peut supprimer l'entrée");
       return;
     }
-    refresh();
+    refreshEntries();
   };
 
   return {
@@ -105,7 +105,7 @@ export const useEntriesStore = defineStore('entries', () => {
     getEntries,
     addEntry,
     deleteEntry,
-    refresh,
+    refreshEntries,
     errors,
     isEntriesLoading,
     currentEntryType,

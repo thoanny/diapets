@@ -3,7 +3,6 @@ import { supabase } from '@/lib/supabaseClient';
 import type { Animal, AnimalInvite, AnimalMember } from '@/types/animals';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { useEntriesStore } from './entries';
 
 const { user } = useAuth();
 
@@ -74,8 +73,8 @@ export const useAnimalsStore = defineStore('animals', () => {
     isInvitesLoading.value = false;
   };
 
-  const refresh = () => {
-    // getAnimals();
+  const refreshAnimals = () => {
+    getAnimals();
     getAnimalMembers();
     getInvites();
   };
@@ -87,7 +86,6 @@ export const useAnimalsStore = defineStore('animals', () => {
     }
 
     if (type === 'code') {
-      const { refresh: entriesRefresh } = useEntriesStore();
       const { data: animal, error: addError } = await supabase.rpc('join_animal', {
         p_code: value,
       });
@@ -97,8 +95,7 @@ export const useAnimalsStore = defineStore('animals', () => {
       }
 
       console.log(`${animal.name} a été ajouté`);
-      entriesRefresh();
-      refresh();
+      refreshAnimals();
     } else if (type === 'name') {
       const { data: animal, error: insertError } = await supabase
         .from('animals')
@@ -113,12 +110,11 @@ export const useAnimalsStore = defineStore('animals', () => {
 
       console.log(`${animal.name} a été ajouté`);
 
-      refresh();
+      refreshAnimals();
     }
   };
 
   const deleteAnimal = async (animalId: string) => {
-    const { refresh: entriesRefresh } = useEntriesStore();
     const { data, error: deleteError } = await supabase
       .from('animals')
       .delete()
@@ -132,8 +128,7 @@ export const useAnimalsStore = defineStore('animals', () => {
       errors.value.push("Seul le propriétaire peut supprimer l'animal");
       return;
     }
-    refresh();
-    entriesRefresh();
+    refreshAnimals();
   };
 
   const leaveAnimal = async (animalId: string) => {
@@ -142,7 +137,6 @@ export const useAnimalsStore = defineStore('animals', () => {
       return;
     }
 
-    const { refresh: entriesRefresh } = useEntriesStore();
     const { data, error: deleteError } = await supabase
       .from('animal_members')
       .delete()
@@ -160,8 +154,7 @@ export const useAnimalsStore = defineStore('animals', () => {
       return;
     }
 
-    refresh();
-    entriesRefresh();
+    refreshAnimals();
   };
 
   return {
@@ -170,7 +163,7 @@ export const useAnimalsStore = defineStore('animals', () => {
     getAnimals,
     animalsFiltered,
     invitesFiltered,
-    refresh,
+    refreshAnimals,
     addAnimal,
     deleteAnimal,
     leaveAnimal,

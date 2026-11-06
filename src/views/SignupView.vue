@@ -87,7 +87,7 @@ const feedback = computed((): FeedbackType | null => result.value?.feedback ?? n
         </div>
       </fieldset>
       <button type="submit" class="btn btn-primary" :disabled="score < 3">S'inscrire</button>
-      <RouterLink :to="{ name: 'Login' }" class="btn btn-secondary btn-ghost">
+      <RouterLink :to="{ name: 'Login' }" class="btn btn-primary btn-outline">
         Se connecter
       </RouterLink>
     </form>

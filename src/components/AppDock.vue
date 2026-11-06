@@ -24,6 +24,7 @@ const addEntryModal = useTemplateRef('add-entry-modal');
 const animalsStore = useAnimalsStore();
 const entriesStore = useEntriesStore();
 const { addEntry } = entriesStore;
+const { refreshAnimals } = animalsStore;
 const { animalsFiltered } = storeToRefs(animalsStore);
 
 const toDatetimeLocal = (date = new Date()) =>
@@ -39,6 +40,11 @@ const currentEntry = ref<NewEntry>({
 const currentType = computed(() => {
   return ENTRY_TYPES.find((t) => t.id === currentEntry.value.type);
 });
+
+const handleSelectEntry = () => {
+  refreshAnimals();
+  selectEntryModal.value?.showModal();
+};
 
 const handleAddEntry = (typeId: EntryType) => {
   selectEntryModal.value?.close();
@@ -66,8 +72,20 @@ const submit = () => {
 <template>
   <Teleport to="body">
     <dialog ref="select-entry-modal" class="modal modal-bottom px-4">
-      <div class="modal-box">
+      <div class="modal-box" v-if="animalsFiltered.length <= 0">
+        <div class="alert alert-info alert-soft flex gap-2 items-center">
+          <span class="grow">Ajoutez au moins un animal.</span>
+          <RouterLink
+            :to="{ name: 'Pets' }"
+            class="btn btn-info btn-sm"
+            @click="selectEntryModal?.close()"
+            >Ajouter</RouterLink
+          >
+        </div>
+      </div>
+      <div class="modal-box" v-else>
         <h3 class="text-lg font-bold">Sélectionner une mesure</h3>
+        <pre>{{}}</pre>
         <div class="grid grid-cols-2 gap-2 pt-4">
           <button
             class="btn btn-primary"
@@ -115,10 +133,15 @@ const submit = () => {
                 required
                 v-model="currentEntry.value"
                 min="0"
+                step=".1"
                 autofocus
               />
               {{ currentType?.unit }}
             </label>
+            <span class="italic" v-if="currentEntry.type === 'glucose'"
+              >=
+              {{ Math.round((Number(currentEntry.value) ?? 0) * 0.18 * 100) / 100 }}&nbsp;g/L</span
+            >
           </fieldset>
           <fieldset class="fieldset">
             <label class="label" for="datetime">Date et heure</label>
@@ -153,50 +176,46 @@ const submit = () => {
   </Teleport>
 
   <div class="dock" v-if="user">
-    <RouterLink :to="{ name: 'Home' }">
+    <RouterLink :to="{ name: 'Home' }" active-class="text-primary">
       <IconHome class="size-6" stroke="1.5" />
       <span class="dock-label">Accueil</span>
     </RouterLink>
 
-    <RouterLink :to="{ name: 'Pets' }">
+    <RouterLink :to="{ name: 'Pets' }" active-class="text-primary">
       <IconPaw class="size-6" stroke="1.5" />
       <span class="dock-label">{{
         animalsFiltered.length < 2 ? 'Mon animal' : 'Mes animaux'
       }}</span>
     </RouterLink>
 
-    <div class="-mt-16">
-      <button
-        class="btn btn-primary btn-circle size-12"
-        @click.prevent="selectEntryModal?.showModal()"
-        v-if="animalsFiltered.length > 0"
-      >
+    <div>
+      <button class="btn btn-primary btn-circle size-12" @click.prevent="handleSelectEntry">
         <IconPlus class="size-6" />
       </button>
     </div>
 
-    <RouterLink :to="{ name: 'Account' }">
+    <RouterLink :to="{ name: 'Account' }" active-class="text-primary">
       <IconUser class="size-6" stroke="1.5" />
       <span class="dock-label">Mon compte</span>
     </RouterLink>
 
-    <RouterLink :to="{ name: 'Settings' }">
+    <RouterLink :to="{ name: 'Settings' }" active-class="text-primary">
       <IconSettings class="size-6" stroke="1.5" />
       <span class="dock-label">Paramètres</span>
     </RouterLink>
   </div>
   <div class="dock" v-else>
-    <RouterLink :to="{ name: 'About' }">
+    <RouterLink :to="{ name: 'About' }" active-class="text-primary">
       <IconInfoCircle class="size-6" stroke="1.5" />
       <span class="dock-label">À propos</span>
     </RouterLink>
 
-    <RouterLink :to="{ name: 'Login' }">
+    <RouterLink :to="{ name: 'Login' }" active-class="text-primary">
       <IconUserKey class="size-6" stroke="1.5" />
       <span class="dock-label">Connexion</span>
     </RouterLink>
 
-    <RouterLink :to="{ name: 'Signup' }">
+    <RouterLink :to="{ name: 'Signup' }" active-class="text-primary">
       <IconWritingSign class="size-6" stroke="1.5" />
       <span class="dock-label">Inscription</span>
     </RouterLink>

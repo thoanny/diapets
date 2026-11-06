@@ -45,7 +45,7 @@ const submit = async () => {
         </RouterLink>
       </fieldset>
       <button type="submit" class="btn btn-primary">Se connecter</button>
-      <RouterLink :to="{ name: 'Signup' }" class="btn btn-secondary btn-ghost">
+      <RouterLink :to="{ name: 'Signup' }" class="btn btn-primary btn-outline">
         S'inscrire
       </RouterLink>
     </form>

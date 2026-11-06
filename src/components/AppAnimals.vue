@@ -7,7 +7,7 @@ import { onMounted, ref } from 'vue';
 import AppLoading from './AppLoading.vue';
 
 const animalsStore = useAnimalsStore();
-const { addAnimal, deleteAnimal, leaveAnimal, refresh, getInvites } = animalsStore;
+const { addAnimal, deleteAnimal, leaveAnimal, refreshAnimals, getInvites } = animalsStore;
 const { errors, invitesFiltered, animalsFiltered, isInvitesLoading, isAnimalsLoading } =
   storeToRefs(animalsStore);
 
@@ -17,7 +17,7 @@ const nameOrCode = ref('');
 const submit = async () => {
   await addAnimal(type.value, nameOrCode.value)
     .then(() => {
-      refresh();
+      refreshAnimals();
     })
     .finally(() => {
       nameOrCode.value = '';
@@ -43,7 +43,7 @@ const copyToClipboard = async (text: string) => {
 };
 
 onMounted(() => {
-  refresh();
+  refreshAnimals();
 });
 </script>
 

@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabaseClient';
-import { useAnimalsStore } from '@/stores/animals';
 import AboutView from '@/views/AboutView.vue';
 import AccountView from '@/views/AccountView.vue';
 import HomeView from '@/views/HomeView.vue';
@@ -77,8 +76,6 @@ router.beforeEach(async (to) => {
     data: { session },
   } = await supabase.auth.getSession();
   if (!session) return '/login';
-  // TODO : vérifier si optimal
-  useAnimalsStore().getAnimals();
 });
 
 export default router;
