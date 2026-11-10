@@ -2,6 +2,8 @@ export type Animal = {
   id: string;
   name: string;
   created_by: string;
+  species: 'cat' | 'dog' | null;
+  birth_date: string | null;
 };
 
 export type AnimalMemberRole = 'owner' | 'member';

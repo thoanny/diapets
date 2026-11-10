@@ -23,7 +23,11 @@ onMounted(() => {
 
 <template>
   <div>
-    <button class="btn btn-primary" popovertarget="popover-1" style="anchor-name: --anchor-1">
+    <button
+      class="btn btn-primary btn-sm"
+      popovertarget="popover-1"
+      style="anchor-name: --anchor-1"
+    >
       <template v-if="currentEntryType">
         <component
           :is="currentEntryType.icon"

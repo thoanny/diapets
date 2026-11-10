@@ -9,7 +9,16 @@ import vueDevTools from 'vite-plugin-vue-devtools';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueDevTools(), tailwindcss(), VitePWA({ registerType: 'autoUpdate' })],
+  plugins: [
+    vue(),
+    vueDevTools(),
+    tailwindcss(),
+    VitePWA({
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      manifest: false,
+      registerType: 'autoUpdate',
+    }),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

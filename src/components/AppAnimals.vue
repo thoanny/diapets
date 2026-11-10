@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { supabase } from '@/lib/supabaseClient';
 import { useAnimalsStore } from '@/stores/animals';
-import { IconPawFilled, IconPlus, IconShare, IconTrash, IconX } from '@tabler/icons-vue';
+import { IconChevronRight, IconPawFilled, IconPlus } from '@tabler/icons-vue';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 import AppLoading from './AppLoading.vue';
 
 const animalsStore = useAnimalsStore();
-const { addAnimal, deleteAnimal, leaveAnimal, refreshAnimals, getInvites } = animalsStore;
-const { errors, invitesFiltered, animalsFiltered, isInvitesLoading, isAnimalsLoading } =
-  storeToRefs(animalsStore);
+const { addAnimal, refreshAnimals } = animalsStore;
+const { errors, animalsFiltered, isAnimalsLoading } = storeToRefs(animalsStore);
 
 const type = ref('name');
 const nameOrCode = ref('');
@@ -22,24 +20,6 @@ const submit = async () => {
     .finally(() => {
       nameOrCode.value = '';
     });
-};
-
-const share = async (animalId: string) => {
-  const { data } = await supabase
-    .from('invites')
-    .insert({ animal_id: animalId })
-    .select('code')
-    .single();
-  console.log('data', data);
-  getInvites();
-};
-
-const copyToClipboard = async (text: string) => {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch (err) {
-    console.error(err);
-  }
 };
 
 onMounted(() => {
@@ -99,70 +79,12 @@ onMounted(() => {
         <div>
           <div class="font-bold">{{ animal.name }}</div>
         </div>
-
-        <button
-          @click="share(animal.id)"
+        <RouterLink
+          :to="{ name: 'PetDetails', params: { id: animal.id } }"
           class="btn btn-primary btn-soft btn-square btn-sm"
-          v-if="animal.is_owner"
         >
-          <IconShare class="size-5" />
-        </button>
-        <button
-          class="btn btn-error btn-soft btn-square btn-sm"
-          @click="deleteAnimal(animal.id)"
-          v-if="animal.is_owner"
-        >
-          <IconTrash class="size-5" />
-        </button>
-        <button
-          @click="leaveAnimal(animal.id)"
-          class="btn btn-error btn-soft btn-square btn-sm"
-          v-if="!animal.is_owner"
-        >
-          <IconX class="size-5" />
-        </button>
-      </li>
-    </ul>
-  </template>
-
-  <AppLoading v-if="isInvitesLoading" />
-  <template v-else>
-    <h2 class="h2" v-if="invitesFiltered.length === 1">Mon code d'invitation</h2>
-    <h2 class="h2" v-if="invitesFiltered.length > 1">Mes codes d'invitations</h2>
-
-    <ul
-      class="list bg-base-100 rounded-box border border-base-300 mt-4"
-      v-if="invitesFiltered.length > 0"
-    >
-      <li class="list-row items-center py-3" v-for="(invite, key) in invitesFiltered" :key>
-        <div>
-          <IconShare class="text-primary size-8" />
-        </div>
-        <div>
-          <div class="font-bold">Invitation pour {{ invite.name }}</div>
-          <div class="text-xs">
-            Expiration&nbsp;:
-            {{
-              new Intl.DateTimeFormat('fr-FR', {
-                dateStyle: 'medium',
-                timeStyle: 'short',
-              }).format(new Date(invite.expires_at))
-            }}
-          </div>
-        </div>
-        <div>
-          <button class="btn btn-soft font-mono" @click="copyToClipboard(invite.code)">
-            {{ invite.code }}
-          </button>
-        </div>
-
-        <!-- <button
-        class="btn btn-error btn-soft btn-square btn-sm"
-        @click="deleteAnimal(animal.id)"
-        v-if="animal.role === 'owner'"
-      >
-        <IconTrash class="size-5" />
-      </button> -->
+          <IconChevronRight />
+        </RouterLink>
       </li>
     </ul>
   </template>

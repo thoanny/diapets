@@ -4,6 +4,7 @@ import AccountView from '@/views/AccountView.vue';
 import HomeView from '@/views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import NotFoundView from '@/views/NotFoundView.vue';
+import PetDetails from '@/views/PetDetails.vue';
 import PetsView from '@/views/PetsView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import SignupView from '@/views/SignupView.vue';
@@ -44,12 +45,24 @@ const routes = [
   },
   {
     path: '/pets',
-    name: 'Pets',
-    component: PetsView,
+    name: 'PetsGroup',
     meta: {
       requiresAuth: true,
     },
+    children: [
+      {
+        path: '',
+        name: 'Pets',
+        component: PetsView,
+      },
+      {
+        path: ':id',
+        name: 'PetDetails',
+        component: PetDetails,
+      },
+    ],
   },
+
   {
     path: '/settings',
     name: 'Settings',

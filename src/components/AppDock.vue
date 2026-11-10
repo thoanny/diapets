@@ -24,7 +24,6 @@ const addEntryModal = useTemplateRef('add-entry-modal');
 const animalsStore = useAnimalsStore();
 const entriesStore = useEntriesStore();
 const { addEntry } = entriesStore;
-const { refreshAnimals } = animalsStore;
 const { animalsFiltered } = storeToRefs(animalsStore);
 
 const toDatetimeLocal = (date = new Date()) =>
@@ -42,7 +41,6 @@ const currentType = computed(() => {
 });
 
 const handleSelectEntry = () => {
-  refreshAnimals();
   selectEntryModal.value?.showModal();
 };
 
@@ -189,7 +187,7 @@ const submit = () => {
     </RouterLink>
 
     <div>
-      <button class="btn btn-primary btn-circle size-12" @click.prevent="handleSelectEntry">
+      <button class="btn btn-primary btn-circle size-10" @click.prevent="handleSelectEntry">
         <IconPlus class="size-6" />
       </button>
     </div>

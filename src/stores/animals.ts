@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabaseClient';
 import type { Animal, AnimalInvite, AnimalMember } from '@/types/animals';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const { user } = useAuth();
 
@@ -14,6 +15,7 @@ export const useAnimalsStore = defineStore('animals', () => {
   const isAnimalsLoading = ref<boolean>(true);
   const isMembersLoading = ref<boolean>(true);
   const isInvitesLoading = ref<boolean>(true);
+  const router = useRouter();
 
   const animalsFiltered = computed(() => {
     return animals.value
@@ -31,6 +33,7 @@ export const useAnimalsStore = defineStore('animals', () => {
         ...invite,
         ...animals.value.find((a) => a.id === invite.animal_id),
       }))
+      .sort((a, b) => new Date(b.expires_at).getTime() - new Date(a.expires_at).getTime())
       .filter((i) => i.created_by === user.value?.id);
   });
 
@@ -129,6 +132,8 @@ export const useAnimalsStore = defineStore('animals', () => {
       return;
     }
     refreshAnimals();
+
+    return router.push({ name: 'Pets' });
   };
 
   const leaveAnimal = async (animalId: string) => {
@@ -155,12 +160,21 @@ export const useAnimalsStore = defineStore('animals', () => {
     }
 
     refreshAnimals();
+    return router.push({ name: 'Pets' });
+  };
+
+  const getAnimalById = (animalId: string | undefined) => {
+    console.log('getAnimalById', animalId);
+    return {
+      animal: animals.value.find((a) => a.id === animalId),
+    };
   };
 
   return {
     errors,
     animals,
     getAnimals,
+    getAnimalById,
     animalsFiltered,
     invitesFiltered,
     refreshAnimals,

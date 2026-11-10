@@ -26,6 +26,7 @@ export const useEntriesStore = defineStore('entries', () => {
 
         return entry.type === currentEntryType.value.id;
       })
+      .sort((a, b) => new Date(a.measured_at).getTime() - new Date(b.measured_at).getTime())
       .reverse();
   });
 
